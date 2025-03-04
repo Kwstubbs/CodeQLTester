@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const vm = require('vm');
+const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -46,8 +47,14 @@ app.get('/fetch', (req, res) => {
  */
 app.get('/readfile', (req, res) => {
     const filename = req.query.filename;
+    const ROOT = path.resolve('/safe/directory'); // Define a safe root directory
     try {
-        const data = fs.readFileSync(filename, 'utf8'); // ⚠️ UNSAFE: Allows path traversal attacks
+        const filePath = path.resolve(ROOT, filename);
+        if (!filePath.startsWith(ROOT)) {
+            res.status(400).send('Invalid file path');
+            return;
+        }
+        const data = fs.readFileSync(filePath, 'utf8');
         res.send(data);
     } catch (error) {
         res.status(500).send('Error reading file');
