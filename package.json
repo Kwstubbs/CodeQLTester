@@ -1,0 +1,8 @@
+{
+    "name": "vulnerable-project",
+    "version": "1.0.0",
+    "dependencies": {
+      "express": "4.15.0",  // ⚠️ Known vulnerabilities
+      "lodash": "4.17.20"   // ⚠️ Security issues
+    }
+  }
